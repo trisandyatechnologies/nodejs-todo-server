@@ -3,6 +3,7 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+var cors = require("cors");
 
 var indexRouter = require("./routes/index");
 var todosRouter = require("./routes/todos");
@@ -10,14 +11,20 @@ var listRouter = require("./routes/list");
 
 var app = express();
 
+app.use(
+  cors({
+    origin: ["http://192.168.1.6:3001", "http://localhost:3001"],
+  })
+);
+
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use("/", indexRouter);
-app.use("/todos", todosRouter);
-app.use("/list", listRouter);
+app.use("/list", todosRouter);
+app.use("/todos", listRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
